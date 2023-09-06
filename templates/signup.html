@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
+{% endblock %}
+{% block body %}
+    <div class="wrapper">
+        <h2>TrafficService Signup</h2>
+        <form action="/signup" method="POST">
+            <div class="input-box">
+                <input name="fname" type="text" placeholder="Enter your First Name" required minlength="3">
+            </div>
+            <div class="input-box">
+                <input name="lname" type="text" placeholder="Enter your Last Name" required minlength="3">
+            </div>
+            <div class="input-box">
+                <input name="username" type="text" placeholder="Enter a Username" required minlength="5">
+            </div>
+
+            <div class="input-box">
+                <div class="select-vehicle-type">
+                    <label for="vehicle">Choose the vehicle : </label>
+                    <select id="vehicle" name="vehicle">
+                        <option value="Car">Car</option>
+                        <option value="Bike">Bike</option>
+                        <option value="Bus">Bus</option>
+                        <option value="Van">Van</option>
+                        <option value="Lorry">Lorry</option>
+                        <option value="Threewheel">Threewheel</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-box">
+                <!-- license reg no can have min length of 7 and maximum lenght of  8  -->
+                <input name="vehicle_reg_no" type="text" placeholder="Valid Vehicle Reg No" required maxlength="8" minlength="7">
+            </div>
+            <div class="input-box">
+                <input name="password" id="pass" type="password" placeholder="Create password" required minlength="8">
+            </div>
+            <div class="input-box">
+                <input id="confirm-pass" type="password" placeholder="Confirm password" required minlength="8">
+            </div>
+            <div class="input-box button">
+                <input type="Submit" value="Register Now">
+            </div>
+            <div class="text">
+                <h3>Already have an account? <a href="/login">Login now</a></h3>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        var password = document.getElementById("pass");
+        var confirm_password = document.getElementById("confirm-pass");
+
+        function validatePassword(){
+            if(password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Passwords Don't Match");
+            } else {
+                confirm_password.setCustomValidity('');
+            }
+        }
+        password.onchange = validatePassword;
+        confirm_password.onkeyup = validatePassword;
+    </script>
+{% endblock %}

@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='authoritysignup.css') }}" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+{% endblock %}
+{% block body %}
+    <div class="header-container">
+        <div class="head">
+            <h1>Traffic Report Service</h1>
+            <a id="logout-button" href="/logout">Logout</a>
+        </div>
+    </div>
+    <div class="content-container">
+        <div class="content">
+            <h3 id="logging-name">Logged In as {{ data[0] }} <span>({{ data[1] }})</span></h3>
+            
+            {% if data[1] == "Admin" %}
+            <!-- Here theres a form for creation of police and rda staff accounts -->
+            <div class="content-1">
+                <form id="signup" action="/authority-registration" method='POST'>
+                    <div class="header">
+                        <h3>Authority Account Creation</h3>
+                    </div>
+                    <div class="sep"></div>
+                    <div class="inputs">
+                        <input id="for-webkit" type="text" name="fname" placeholder="First Name" required autofocus
+                            minlength="3" />
+                        <input id="for-webkit" type="text" name="lname" placeholder="Last Name" required minlength="3" />
+                        <input id="for-webkit" type="username" name="username" placeholder="Username" required
+                            minlength="5" />
+                        <input id="for-webkit" class="pass-auth" type="password" name="password" placeholder="Password" required
+                            minlength="8" />
+                        <input id="for-webkit" class="pass-auth-confirm" type="password" name="password2" placeholder="Confirm password" minlength="8"
+                            required />
+
+
+                        <div class="checkboxy">
+                            <div class="checkbox1">
+                                <label class="acctype">Police</label>
+                                <input name="cecky" id="checky" value="Police" type="radio" />
+                            </div>
+                            <br>
+                            <div class="checkbox2">
+                                <label class="acctype">RDA-Staff</label>
+                                <input name="cecky" id="checky" value="RDA-Staff" type="radio" />
+                            </div>
+                        </div>
+                        <button type="submit" id="submit">Create Account</button>
+                    </div>
+                </form>
+            </div>
+            <script>
+                var password = document.querySelector(".pass-auth");
+                var confirm_password = document.querySelector(".pass-auth-confirm");
+        
+                function validatePassword(){
+                    if(password.value != confirm_password.value) {
+                        confirm_password.setCustomValidity("Passwords Don't Match");
+                    } else {
+                        confirm_password.setCustomValidity('');
+                    }
+                }
+                password.onchange = validatePassword;
+                confirm_password.onkeyup = validatePassword;
+            </script>
+            {% endif %}
+
+            {% if data[1] == "Resident" %}
+            <!-- another form is present where we can comment and give date and mark location on map and send the report the accident
+                    limit the no of reports per day as 1 -->
+            <div class="content-2">
+                <h3>Report an Accident</h3>
+                <h5>Vehicle : {{data[3]}}</h3>
+                <h5>Vehicle Registration No : {{data[2]}}</h3>
+                    <form action="/send-report" method="POST" enctype="multipart/form-data">
+                        <div class="text-report">
+                            <div class="report">
+                                <input type="text" id="title" name="report_title" placeholder="Incident (250 char)"
+                                    maxlength="250" required>
+
+                                <div class="file-upload-wrapper">
+                                    <label for="file-upload-field">Upload an Image : </label>
+                                    <input name="file" type="file" class="file-upload-field" value="" accept="image/*"
+                                        required>
+                                </div>
+
+                                <div class="select-city">
+                                    <label for="city">Choose the city : </label>
+                                    <select id="city" name="city">
+                                        <option value="Colombo">Colombo</option>
+                                        <option value="Kandy">Kandy</option>
+                                        <option value="Galle">Galle</option>
+                                        <option value="Jaffna">Jaffna</option>
+                                        <option value="Negombo">Negombo</option>
+                                        <option value="Trincomalee">Trincomalee</option>
+                                        <option value="Anuradhapura">Anuradhapura</option>
+                                        <option value="Nuwara Eliya">Nuwara Eliya</option>
+                                        <option value="Batticaloa">Batticaloa</option>
+                                        <option value="Matara">Matara</option>
+                                        <option value="Ratnapura">Ratnapura</option>
+                                        <option value="Kurunegala">Kurunegala</option>
+                                        <option value="Gampaha">Gampaha</option>
+                                        <option value="Badulla">Badulla</option>
+                                        <option value="Ampara">Ampara</option>
+                                        <option value="Hambantota">Hambantota</option>
+                                        <option value="Puttalam">Puttalam</option>
+                                        <option value="Polonnaruwa">Polonnaruwa</option>
+                                        <option value="Kalutara">Kalutara</option>
+                                        <option value="Kegalle">Kegalle</option>
+                                        <option value="Matale">Matale</option>
+                                        <option value="Vavuniya">Vavuniya</option>
+                                        <option value="Beruwala">Beruwala</option>
+                                        <option value="Embilipitiya">Embilipitiya</option>
+                                        <option value="Chilaw">Chilaw</option>
+                                        <option value="Eravur">Eravur</option>
+                                        <option value="Mannar">Mannar</option>
+                                        <option value="Monaragala">Monaragala</option>
+                                        <option value="Weligama">Weligama</option>
+                                        <option value="Kuliyapitiya">Kuliyapitiya</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- location pin of accident -->
+                        <div id="map"></div>
+                        <input type="hidden" id="latitude" name="latitude">
+                        <input type="hidden" id="longitude" name="longitude">
+                        <button type="submit" id="submit-report">Send Report</button>
+                    </form>
+
+                    <script>
+                        var map = L.map('map').setView([7.8774, 80.7003], 12);
+
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '© OpenStreetMap contributors'
+                        }).addTo(map);
+
+                        var marker = L.marker([7.8774, 80.7003], { draggable: true }).addTo(map);
+
+                        marker.on('dragend', function (event) {
+                            var latlng = event.target.getLatLng();
+                            document.getElementById('latitude').value = latlng.lat;
+                            document.getElementById('longitude').value = latlng.lng;
+                        });
+                    </script>
+            </div>
+            {% endif %}
+
+            {% if data[1] == "RDA-Staff" or data[1] == "Police" %}
+            <!-- Here If its a Police we must list all reports and button for graph section that has pie chart and bar chart
+                    must be able to delete reports -->
+                <div class="content-3">
+                    <div class="button-container">
+                        <div class="two-buttons">
+                            <button class="btn btn-inactive" id="button1">Map View</button>
+                            <button class="btn btn-inactive" id="button2">Graph View</button>
+                        </div>
+                    </div>
+
+                    <!-- (Output Of Map view Button) -->
+                    <div id="list-map" class="list-map">
+                        <!-- list of reports display -->
+                        <div class="report-list"> 
+                            <div class="list-container">
+                                {% for report in all_reports %}
+                                    <div class="list-item">
+                                        <img src="{{ url_for('static', filename='reportimages/' + report[7]) }}" />
+                                        <h4>{{ report[3] }}</h4>
+                                        <p>{{ report[1] }}</p>
+                                        <p>{{ report[2] }}</p>
+                                        <p>{{ report[4] }}</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- map display with reports location pinned -->
+                        <div id="map" class="map2">
+                        </div>
+                    </div>
+                    
+                    <!-- (Output Of Graph view Button) -->
+                    <div id="graph-display">
+                        <div id="piechart_div" style="border: 1px solid #ccc"></div>
+                        <div id="barchart_div" style="border: 1px solid #ccc"></div>
+                    </div>
+                </div>
+                <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+                <script>
+                    // JavaScript to toggle button styles
+                    const buttons = document.querySelectorAll('.btn');
+
+                    // Set default active button
+                    buttons[0].classList.add('active');
+
+                    var mapbutton = document.getElementById("button1");
+                    var graphbutton = document.getElementById("button2");
+
+                    // The 2 buttons work here 
+                    document.getElementById('graph-display').style.display = "none";
+
+                    mapbutton.addEventListener('click', () => {
+                        document.getElementById('list-map').style.display = "";
+                        document.getElementById('graph-display').style.display = "none";
+                    });
+
+                    graphbutton.addEventListener('click', () => {
+                        document.getElementById('list-map').style.display = "none";
+                        document.getElementById('graph-display').style.display = "";
+                    });
+
+
+                    buttons.forEach(button => {
+                        button.addEventListener('click', () => {
+                            buttons.forEach(btn => {
+                                btn.classList.remove('active');
+                                btn.classList.add('btn-inactive');
+                            });
+                            button.classList.add('active');
+                            button.classList.remove('btn-inactive');
+                        });
+                    });
+
+                    // ---------------Javascript for report-list-map ---------------------
+
+                    // Initialize the map
+                    var map = L.map('map').setView([7.8774, 80.7003], 8);
+
+                    // Add OpenStreetMap tile layer
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(map);
+
+                    // python to ajax (Red Line Shown Because vs thinks wrong js but code is correct (neglecting the error!))
+                    var jsDataList = {{ all_reports | tojson | safe }};
+
+                    // latitude, longitude, and additional information container
+                    var locations = [];
+
+                    jsDataList.forEach(report => {
+                        locations.push({lat: report[6], lng: report[5], name: report[1], info: report[2]})
+                    });
+
+                    // Add markers for each location with hover information
+                    locations.forEach(function (location) {
+                        var marker = L.marker([location.lat, location.lng])
+                            .addTo(map)
+                            .bindPopup(location.name);
+
+                        marker.on('mouseover', function (e) {
+                            this.bindTooltip(location.info).openTooltip();
+                        });
+
+                        marker.on('mouseout', function (e) {
+                            this.unbindTooltip();
+                        });
+                    });
+
+                </script>
+                <!-- for charts  -->
+                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                <script type="text/javascript">
+                google.charts.load('current', {'packages':['corechart']});
+
+                // Draw the pie chart and bar chart when Charts is loaded.
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+
+                    // Data For the Pie Chart
+                    var data1 = new google.visualization.DataTable();
+                    data1.addColumn('string', 'Vehicle');
+                    data1.addColumn('number', 'count');
+                    data1.addRows([
+                        {% for key, value in accident_dict.items() %}
+                                ['{{ key }}', {{ value }}],
+                        {% endfor %}
+                    ]);
+
+                    var piechart_options = {title:'Accidents by Vehicle Type',
+                                "width":400,
+                                "height":300};
+                    var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+                    piechart.draw(data1, piechart_options);
+
+                    // Data for thebarchart 
+                    var data2 = new google.visualization.DataTable();
+                    data2.addColumn('string', 'city');
+                    data2.addColumn('number', 'count');
+                    data2.addRows([
+                        {% for key, value in city_dict.items() %}
+                                ['{{ key }}', {{ value }}],
+                        {% endfor %}
+                    ]);
+
+                    var barchart_options = {title:'Accidents Per City',
+                                "width":400,
+                                "height":300,
+                                legend: 'none'};
+                    var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+                    barchart.draw(data2, barchart_options);
+                }
+                </script>
+            {% endif %}
+
+
+        </div>
+    </div>
+{% endblock %}

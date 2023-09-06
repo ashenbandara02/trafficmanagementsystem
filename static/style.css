@@ -1,0 +1,255 @@
+body{
+    font-family: sans-serif;
+}
+/* Flash Message */
+#flash-container{
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width:100%;
+    height: 100%;
+    height: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.flash-content{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    width: 80%;
+    padding: 10px;
+    background-color: white;
+    border: 10px solid white;
+    border-radius: 10px;
+}
+#flash-close-message{
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+/* for home.html */
+
+.header-container{
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-family: sans-serif;
+}
+.head{
+    width: 80%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    border: none;
+    box-shadow: 0 2px 0px 0px #ccc;
+}
+
+.content-container{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.content{
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+}
+#logging-name{
+    width: 100%;
+}
+
+#logout-button{
+    padding: 20px;
+    text-decoration: none;
+    font-size: 15pt;
+    color: #16a085;
+}
+
+/* Resident account Map and Form Report Submit */
+#map {
+    height: 500px;
+}
+.content-2{
+    width: 100%;
+}
+.text-report{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.report{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    width: 100%;
+}
+
+.text-report #title, .file-upload-wrapper, .select-city{
+    width: 100%;
+    background: #f5f5f5;
+    font-size: 0.8rem;
+    font-family: sans-serif;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: none;
+    padding: 13px 10px;
+    margin-bottom: 10px;
+    box-shadow: inset 0px 2px 3px rgba( 0,0,0,0.1 );
+    clear: both;
+    overflow: hidden;
+}
+.file-upload-field{
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 4px;
+    width: 300px;
+}
+
+#title:focus{
+    background: #fff;
+    box-shadow: 0px 0px 0px 3px #fff38e, inset 0px 2px 3px rgba( 0,0,0,0.2 ), 0px 5px 5px rgba( 0,0,0,0.15 );
+    outline: none;
+}
+
+#submit-report{
+  background-color: initial;
+  background-image: linear-gradient(-180deg, #00D775, #00BD68);
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter,-apple-system,system-ui,Roboto,"Helvetica Neue",Arial,sans-serif;
+  height: 44px;
+  line-height: 44px;
+  outline: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  pointer-events: auto;
+  position: relative;
+  text-align: center;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 100%;
+  z-index: 9;
+  border: 0;
+}
+
+#submit-report:hover {
+  background: #00bd68;
+}
+
+/* for selecting city */
+select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+}
+
+/* Style the dropdown arrow */
+select::-ms-expand {
+    display: none;
+}
+select:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+
+/* content - 3 */
+.content-3{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+.button-container{
+    width: 100%;
+    padding: 10px;
+}
+.two-buttons {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    padding: 5px;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-inactive {
+    background-color: #ccc;
+    color: #333;
+}
+.btn.inactive {
+    background-color: #ccc;
+    color: #333;
+}
+.btn-active {
+    background-color: #007bff;
+    color: #fff;
+}
+.btn.active {
+    background-color: #00D775;
+    color: #fff;
+}
+
+/* report-list-css */
+.report-list {
+    width: 30%;
+}
+
+.list-container {
+    width: 100%;
+    height: 500px;
+    overflow-y: scroll; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+}
+.list-item {
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+}
+
+.list-item img{
+    width: 100%;
+    height: 180px;
+}
+
+.list-map{
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+}
+
+.map2{
+    width: 80%;
+    flex-grow: 8;
+}
+/* For the Graphs */
+
+#graph-display{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
