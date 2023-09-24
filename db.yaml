@@ -1,4 +1,4 @@
-mysql_host : "127.0.0.1"
-mysql_user: "root"
-mysql_password: ""
-mysql_db: "traffictrack"
+mysql_host : "sql12.freesqldatabase.com"
+mysql_user: "sql12648627"
+mysql_password: "Q7VLTz3ZQP"
+mysql_db: "sql12648627"
